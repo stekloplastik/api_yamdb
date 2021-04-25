@@ -31,18 +31,21 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    # default apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'titles',
+    # Additional apps
     'rest_framework',
     'rest_framework.authtoken',
     'django_filters',
+    # Project apps
+    'titles',
     'users',
-    'review'
+    'review',
 ]
 
 AUTH_USER_MODEL = 'users.CustomUser'

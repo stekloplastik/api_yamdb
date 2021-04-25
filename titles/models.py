@@ -21,4 +21,5 @@ class Title(models.Model):
         blank=True,
         related_name='titles',
     )
+    description = models.TextField(null=True, blank=True)
     genres = models.ManyToManyField(Genre, related_name='titles')
