@@ -1,3 +1,4 @@
+from django.db.models import Avg
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, viewsets
 from rest_framework.pagination import PageNumberPagination
@@ -41,5 +42,9 @@ class TitleViewSet(viewsets.ModelViewSet):
     serializer_class = TitleSerializer
     queryset = Title.objects.all()
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['name', 'year', 'category', 'genre', ]
+    filterset_fields = ['name', 'year', 'category', 'genres']
     pagination_class = PageNumberPagination
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.annotate(rating=Avg('reviews__score'))

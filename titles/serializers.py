@@ -14,19 +14,20 @@ class TitleSerializer(serializers.ModelSerializer):
         many=True,
         source='genres',
     )
+    rating = serializers.IntegerField(read_only=True)
 
     class Meta:
-        fields = '__all__'
+        fields = ('id', 'name', 'year', 'description', 'category', 'rating', 'genre')
         model = Title
 
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
-        fields = ['name', 'slug']
+        fields = ('name', 'slug')
         model = Category
 
 
 class GenreSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = ['name', 'slug']
+        fields = ('name', 'slug')
         model = Genre
