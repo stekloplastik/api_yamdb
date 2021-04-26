@@ -1,11 +1,12 @@
 from django.db.models import Avg
-from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, viewsets
 from rest_framework.pagination import PageNumberPagination
 
 from titles.models import Category, Genre, Title
 from titles.serializers import CategorySerializer, GenreSerializer, \
-    TitleSerializer
+    TitleReadSerializer, TitleWriteSerializer
+from .filters import TitleFilter
+from .permissions import IsAdminOrReadOnly
 
 
 class ListCreateDestroyModelViewSet(
@@ -22,6 +23,7 @@ class ListCreateDestroyModelViewSet(
 
 class CategoryViewSet(ListCreateDestroyModelViewSet):
     serializer_class = CategorySerializer
+    permission_classes = [IsAdminOrReadOnly]
     queryset = Category.objects.all()
     filter_backends = [filters.SearchFilter]
     search_fields = ['name', ]
@@ -31,6 +33,7 @@ class CategoryViewSet(ListCreateDestroyModelViewSet):
 
 class GenreViewSet(ListCreateDestroyModelViewSet):
     serializer_class = GenreSerializer
+    permission_classes = [IsAdminOrReadOnly]
     queryset = Genre.objects.all()
     filter_backends = [filters.SearchFilter]
     search_fields = ['name', ]
@@ -39,10 +42,16 @@ class GenreViewSet(ListCreateDestroyModelViewSet):
 
 
 class TitleViewSet(viewsets.ModelViewSet):
-    serializer_class = TitleSerializer
+
+    def get_serializer_class(self):
+        if self.action in ['list', 'retrieve']:
+            return TitleReadSerializer
+        else:
+            return TitleWriteSerializer
+
+    permission_classes = [IsAdminOrReadOnly]
     queryset = Title.objects.all()
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['name', 'year', 'category', 'genres']
+    filterset_class = TitleFilter
     pagination_class = PageNumberPagination
 
     def get_queryset(self):

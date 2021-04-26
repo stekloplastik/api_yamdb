@@ -8,8 +8,9 @@ User = get_user_model()
 
 
 class Review(models.Model):
-    title = models.ForeignKey(Title, on_delete=models.CASCADE,
-                              related_name='reviews')
+    title = models.ForeignKey(
+        Title, on_delete=models.CASCADE, related_name='reviews'
+    )
     text = models.TextField(max_length=10000)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     score = models.IntegerField(
@@ -19,7 +20,9 @@ class Review(models.Model):
 
 
 class Comment(models.Model):
-    review = models.ForeignKey(Review, on_delete=models.CASCADE)
+    review = models.ForeignKey(
+        Review, on_delete=models.CASCADE, related_name='comments'
+    )
     text = models.TextField(max_length=1000)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     pub_date = models.DateTimeField(auto_now_add=True)
