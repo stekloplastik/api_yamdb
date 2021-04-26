@@ -1,8 +1,8 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from .views import (CreateUserViewSet, UserEdit, get_jwt_token,
-                    send_confirmation_code)
+from .views import (CreateUserViewSet, get_jwt_token, send_confirmation_code,
+                    UserEdit)
 
 router = DefaultRouter()
 router.register('users', CreateUserViewSet)
