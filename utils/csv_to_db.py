@@ -12,7 +12,6 @@ def fill_db(file_path, model):
             attr_dict = {
                 model_fields[n]: row[n]
                 for n in range(len(model_fields))
-                if model_fields[n] != 'id'
             }
             try:
                 with transaction.atomic():
