@@ -30,9 +30,11 @@ class CommentsViewSet(ModelViewSet):
     )
 
     def get_queryset(self):
-        reviews = get_object_or_404(Review, pk=self.kwargs.get('review_id'))
-        return reviews.comments.all()
+        review = get_object_or_404(Review, pk=self.kwargs.get('review_id'),
+                                   title__id=self.kwargs['title_id'])
+        return review.comments.all()
 
     def perform_create(self, serializer):
-        review = get_object_or_404(Review, pk=self.kwargs.get('review_id'))
+        review = get_object_or_404(Review, pk=self.kwargs.get('review_id'),
+                                   title__id=self.kwargs['title_id'])
         serializer.save(author=self.request.user, review=review)

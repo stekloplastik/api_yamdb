@@ -4,18 +4,18 @@ from rest_framework import routers
 from .views import ReviewsViewSet, CommentsViewSet
 
 
-router = routers.DefaultRouter()
-router.register(
+v1_router = routers.DefaultRouter()
+v1_router.register(
     r'titles/(?P<title_id>\d+)/reviews',
     ReviewsViewSet,
     basename='ReviewsViewSet'
 )
-router.register(
+v1_router.register(
     r'titles/(?P<title_id>\d+)/reviews/(?P<review_id>\d+)/comments',
     CommentsViewSet,
     basename='CommentsViewSet'
 )
 
 urlpatterns = [
-    path('v1/', include(router.urls))
+    path('v1/', include(v1_router.urls))
 ]
