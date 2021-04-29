@@ -1,6 +1,5 @@
 from django.db.models import Avg
 from rest_framework import filters, viewsets
-from rest_framework.pagination import PageNumberPagination
 
 from titles.models import Category, Genre, Title
 from titles.serializers import CategorySerializer, GenreSerializer, \
@@ -27,7 +26,6 @@ class CategoryViewSet(ListCreateDestroyModelViewSet):
     queryset = Category.objects.all()
     filter_backends = [filters.SearchFilter]
     search_fields = ['name', ]
-    pagination_class = PageNumberPagination
     lookup_field = 'slug'
 
 
@@ -37,7 +35,6 @@ class GenreViewSet(ListCreateDestroyModelViewSet):
     queryset = Genre.objects.all()
     filter_backends = [filters.SearchFilter]
     search_fields = ['name', ]
-    pagination_class = PageNumberPagination
     lookup_field = 'slug'
 
 
@@ -50,10 +47,5 @@ class TitleViewSet(viewsets.ModelViewSet):
             return TitleWriteSerializer
 
     permission_classes = [IsAdminOrReadOnly]
-    queryset = Title.objects.all()
+    queryset = Title.objects.all().annotate(rating=Avg('reviews__score'))
     filterset_class = TitleFilter
-    pagination_class = PageNumberPagination
-
-    def get_queryset(self):
-        qs = super().get_queryset()
-        return qs.annotate(rating=Avg('reviews__score'))
