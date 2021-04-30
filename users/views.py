@@ -43,15 +43,12 @@ class CreateUserViewSet(viewsets.ModelViewSet):
 def send_confirmation_code(request):
     serializer = SendCodeSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
-    email = request.data.get('email', False)
+    email = serializer.data.get('email')
     user = (
-        CustomUser.objects.
-        filter(email=email).
-        exists().
-        get_or_create_user(email=email)
+        CustomUser.objects.get_or_create(email=email, username=username)
     )
     confirmation_code = default_token_generator.make_token(user)
-    CustomUser.objects.filter(email=email).update(
+    CustomUser.objects.filter(user=user).update(
         confirmation_code=make_password(
             confirmation_code, salt=None, hasher='default'
         )
