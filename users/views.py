@@ -45,7 +45,8 @@ def send_confirmation_code(request):
     serializer.is_valid(raise_exception=True)
     email = serializer.data.get('email')
     user = (
-        CustomUser.objects.get_or_create(email=email, username=username)
+        CustomUser.objects.get_or_create(email=email,
+                                         username=request.user.username)
     )
     confirmation_code = default_token_generator.make_token(user)
     CustomUser.objects.filter(user=user).update(
